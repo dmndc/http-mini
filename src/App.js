@@ -42,7 +42,7 @@ class App extends Component {
     axios.get(this.state.baseUrl + '/api/buyers')
       .then( res => {
         this.setState({ buyersToDisplay: res.data })
-      })
+      }).catch(console.log);
   }
 
   sellCar(id) {
@@ -57,7 +57,7 @@ class App extends Component {
     axios.get(this.state.baseUrl + '/api/vehicles/?make=' + make)
       .then( res => {
         this.setState({ vehiclesToDisplay: res.data })
-      })
+      }).catch(console.log);
   }
 
   filterByColor() {
@@ -65,7 +65,7 @@ class App extends Component {
     axios.get(this.state.baseUrl + '/api/vehicles/?color=' + color)
       .then( res => {
         this.setState({ vehiclesToDisplay: res.data })
-      })
+      }).catch(console.log);
   }
 
   updatePrice(id, priceChange) {
@@ -102,7 +102,7 @@ class App extends Component {
     axios.post(this.state.baseUrl + '/api/buyers', newBuyer)
       .then( res => {
         this.setState({ buyersToDisplay: res.data.buyers })
-      })
+      }).catch(console.log);
   }
 
   nameSearch() {
@@ -110,7 +110,7 @@ class App extends Component {
     axios.get(this.state.baseUrl + '/api/buyers/?name=' + searchLetters)
       .then( res => {
         this.setState({ buyersToDisplay: res.data })
-      })
+      }).catch(console.log);
   }
 
   byYear() {
@@ -119,7 +119,7 @@ class App extends Component {
       .then( res => {
         console.log(res.data)
         this.setState({ vehiclesToDisplay: res.data })
-      })
+      }).catch(console.log);
   }
 
 // ==============================================
