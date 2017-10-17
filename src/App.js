@@ -14,7 +14,8 @@ class App extends Component {
 
     this.state = {
       vehiclesToDisplay: [],
-      buyersToDisplay: []
+      buyersToDisplay: [],
+      baseUrl: 'https://joes-autos.herokuapp.com'
     }
 
     this.getVehicles = this.getVehicles.bind(this);
@@ -30,30 +31,30 @@ class App extends Component {
   }
 
   getVehicles() {
-    axios.get('https://joes-autos.herokuapp.com/api/vehicles')
-    .then( res => {
-      this.setState({ vehiclesToDisplay: res.data})
-      ToastStore.success('Success!', 3000)
-    })
+    axios.get(this.state.baseUrl + '/api/vehicles')
+      .then( res => {
+        this.setState({ vehiclesToDisplay: res.data})
+        ToastStore.success('Success!', 3000)
+      }).catch(console.log);
   }
 
   getPotentialBuyers() {
-    axios.get('https://joes-autos.herokuapp.com/api/buyers')
+    axios.get(this.state.baseUrl + '/api/buyers')
       .then( res => {
         this.setState({ buyersToDisplay: res.data })
       })
   }
 
   sellCar(id) {
-    axios.delete('https://joes-autos.herokuapp.com/api/vehicle/:' + id)
+    axios.delete(this.state.baseUrl + '/api/vehicles/' + id)
       .then( res => {
-        this.setState({ vehiclesToDisplay: res.data })
-      })
+        this.setState({ vehiclesToDisplay: res.data.vehicles })
+      }).catch(console.log);
   }
 
   filterByMake() {
     let make = this.refs.selectedMake.value
-    axios.get('https://joes-autos.herokuapp.com/api/vehicles/?make=' + make)
+    axios.get(this.state.baseUrl + '/api/vehicles/?make=' + make)
       .then( res => {
         this.setState({ vehiclesToDisplay: res.data })
       })
@@ -61,29 +62,17 @@ class App extends Component {
 
   filterByColor() {
     let color = this.refs.selectedColor.value;
-    axios.get('https://joes-autos.herokuapp.com/api/vehicles/?color=' + color)
+    axios.get(this.state.baseUrl + '/api/vehicles/?color=' + color)
       .then( res => {
         this.setState({ vehiclesToDisplay: res.data })
       })
   }
 
-  updatePrice(priceChange) {
-    console.log(priceChange)
-    // axios (PUT)
-    // setState with response -> vehiclesToDisplay
-    // Increase/decrease price of car by $1000
-    
-    // Request url: base url + '/api/vehicle/:id/:change'
-    // // id is the id of the vehicle
-    
-    // // Value of change needs to be either up or down.
-    // // Response: updated vehicles array
-
-    // let id = this.refs.v.id;
-    // axios.put('https://joes-autos.herokuapp.com/api/vehicle/:' + id + '/:' + priceChange)
-    //   .then( res => {
-    //     this.setState({ vehiclesToDisplay: res.data })
-    //   })
+  updatePrice(id, priceChange) {
+    axios.put(this.state.baseUrl + '/api/vehicles/' + id + '/' + priceChange)
+      .then( res => {
+        this.setState({ vehiclesToDisplay: res.data.vehicles })
+      }).catch(console.log);
 
   }
 
@@ -96,10 +85,11 @@ class App extends Component {
     price: this.refs.price.value
   }  
 
-  axios.post('https://joes-autos.herokuapp.com/api/vehicles', newCar)
+  axios.post(this.state.baseUrl + '/api/vehicles', newCar)
     .then( res => {
-      this.setState({ vehiclesToDisplay: res.data.vehicles })
+      this.setState({ vehiclesToDisplay: res.data.vehicles });
     })
+    .catch(console.log);
 }
 
 addBuyer() {
@@ -109,7 +99,7 @@ addBuyer() {
     address: this.refs.address.value
   }
 
-  axios.post('https://joes-autos.herokuapp.com/api/buyers', newBuyer)
+  axios.post(this.state.baseUrl + '/api/buyers', newBuyer)
     .then( res => {
       this.setState({ buyersToDisplay: res.data.buyers })
     })
@@ -117,7 +107,7 @@ addBuyer() {
 
 nameSearch() {
   let searchLetters = this.refs.searchLetters.value;
-  axios.get('https://joes-autos.herokuapp.com/api/buyers/?name=' + searchLetters)
+  axios.get(this.state.baseUrl + '/api/buyers/?name=' + searchLetters)
     .then( res => {
       this.setState({ buyersToDisplay: res.data })
     })
@@ -125,7 +115,7 @@ nameSearch() {
 
 byYear() {
   let year = this.refs.searchYear.value;
-  axios.get('https://joes-autos.herokuapp.com/api/vehicles/?year=' + year)
+  axios.get(this.state.baseUrl + '/api/vehicles/?year=' + year)
     .then( res => {
       console.log(res.data)
       this.setState({ vehiclesToDisplay: res.data })
@@ -163,11 +153,11 @@ resetData(dataToReset) {
           <p>Price: { v.price }</p>
           <button
             className='btn btn-sp'
-            onClick={ () => this.updatePrice('up') }
+            onClick={ () => this.updatePrice(v.id, 'up') }
             >Increase Price</button>
           <button
             className='btn btn-sp'
-            onClick={ () => this.updatePrice('down') }
+            onClick={ () => this.updatePrice(v.id, 'down') }
             >Decrease Price</button>  
           <button 
             className='btn btn-sp'
