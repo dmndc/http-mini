@@ -69,58 +69,58 @@ class App extends Component {
   }
 
   updatePrice(id, priceChange) {
-    axios.put(this.state.baseUrl + '/api/vehicles/' + id + '/' + priceChange)
-      .then( res => {
-        this.setState({ vehiclesToDisplay: res.data.vehicles })
-      }).catch(console.log);
+  axios.put(this.state.baseUrl + '/api/vehicles/' + id + '/' + priceChange)
+    .then( res => {
+      this.setState({ vehiclesToDisplay: res.data.vehicles })
+    }).catch(console.log);
 
   }
 
   addCar(){
-  let newCar = {
-    make: this.refs.make.value,
-    model: this.refs.model.value,
-    color: this.refs.color.value,
-    year: this.refs.year.value,
-    price: this.refs.price.value
-  }  
+    let newCar = {
+      make: this.refs.make.value,
+      model: this.refs.model.value,
+      color: this.refs.color.value,
+      year: this.refs.year.value,
+      price: this.refs.price.value
+    }  
 
-  axios.post(this.state.baseUrl + '/api/vehicles', newCar)
-    .then( res => {
-      this.setState({ vehiclesToDisplay: res.data.vehicles });
-    })
-    .catch(console.log);
-}
-
-addBuyer() {
-  let newBuyer ={
-    name: this.refs.name.value,
-    phone: this.refs.phone.value,
-    address: this.refs.address.value
+    axios.post(this.state.baseUrl + '/api/vehicles', newCar)
+      .then( res => {
+        this.setState({ vehiclesToDisplay: res.data.vehicles });
+      })
+      .catch(console.log);
   }
 
-  axios.post(this.state.baseUrl + '/api/buyers', newBuyer)
-    .then( res => {
-      this.setState({ buyersToDisplay: res.data.buyers })
-    })
-}
+  addBuyer() {
+    let newBuyer ={
+      name: this.refs.name.value,
+      phone: this.refs.phone.value,
+      address: this.refs.address.value
+    }
 
-nameSearch() {
-  let searchLetters = this.refs.searchLetters.value;
-  axios.get(this.state.baseUrl + '/api/buyers/?name=' + searchLetters)
-    .then( res => {
-      this.setState({ buyersToDisplay: res.data })
-    })
-}
+    axios.post(this.state.baseUrl + '/api/buyers', newBuyer)
+      .then( res => {
+        this.setState({ buyersToDisplay: res.data.buyers })
+      })
+  }
 
-byYear() {
-  let year = this.refs.searchYear.value;
-  axios.get(this.state.baseUrl + '/api/vehicles/?year=' + year)
-    .then( res => {
-      console.log(res.data)
-      this.setState({ vehiclesToDisplay: res.data })
-    })
-}
+  nameSearch() {
+    let searchLetters = this.refs.searchLetters.value;
+    axios.get(this.state.baseUrl + '/api/buyers/?name=' + searchLetters)
+      .then( res => {
+        this.setState({ buyersToDisplay: res.data })
+      })
+  }
+
+  byYear() {
+    let year = this.refs.searchYear.value;
+    axios.get(this.state.baseUrl + '/api/vehicles/?year=' + year)
+      .then( res => {
+        console.log(res.data)
+        this.setState({ vehiclesToDisplay: res.data })
+      })
+  }
 
 // ==============================================
 // RESET DATA - DON'T CHANGE
